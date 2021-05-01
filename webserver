@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+serverstart(){
+sudo service apache2 start
+if [ $? == 0 ]
+then
+echo "Service started succesfully"
+sudo mv index.html /var/www/html/
+echo "Server Configured Successfully"
+firefox 127.0.0.1
+else
+echo "Service not started"
+echo "Trying to renstall apache2"
+sudo apt-get install --reinstall apache2
+fi
+}
+which apache2 > /dev/null
+if [ $? == 0 ]
+then
+	echo "Apache is already installed"
+	serverstart
+else
+	ping -c 3 google.com
+	if [ $? == 0 ]
+	then
+		sudo apt-get update -y
+		sudo apt-get install apache2 -y
+		serverstart
+	else
+		echo "Check your Internet Connection"
+	fi
+fi
